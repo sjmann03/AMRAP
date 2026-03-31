@@ -1,60 +1,54 @@
-//
-//  ContentView.swift
-//  AMRAP
-//
-//  Created by Spencer Mann on 2/26/26.
-//
-
 import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-
+    @State private var selectedTab = 0
+    
+    // Access the shared timer manager
+    private var timerManager: TimerManager { TimerManager.shared }
+    
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+        ZStack(alignment: .top) {
+            TabView(selection: $selectedTab) {
+                WorkoutView()
+                    .tabItem {
+                        Label("Workout", systemImage: "dumbbell.fill")
                     }
-                }
-                .onDelete(perform: deleteItems)
-            }
-#if os(macOS)
-            .navigationSplitViewColumnWidth(min: 180, ideal: 200)
-#endif
-            .toolbar {
-#if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-#endif
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                    .tag(0)
+                
+                HistoryView()
+                    .tabItem {
+                        Label("History", systemImage: "calendar")
                     }
-                }
+                    .tag(1)
+                
+                AnalyticsView()
+                    .tabItem {
+                        Label("Analytics", systemImage: "chart.bar.fill")
+                    }
+                    .tag(2)
+                
+                TemplatesView()
+                    .tabItem {
+                        Label("Templates", systemImage: "list.clipboard")
+                    }
+                    .tag(3)
+                
+                SettingsView()
+                    .tabItem {
+                        Label("Settings", systemImage: "gearshape.fill")
+                    }
+                    .tag(4)
             }
-        } detail: {
-            Text("Select an item")
+            .safeAreaInset(edge: .top) {
+                TimerBannerView(selectedTab: $selectedTab)
+            }
         }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("StartRestTimer"))) { notification in
+            if let seconds = notification.object as? Int {
+                timerManager.startTimer(seconds: seconds)
+            } else {
+                timerManager.startTimer()
             }
         }
     }
@@ -62,5 +56,4 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }

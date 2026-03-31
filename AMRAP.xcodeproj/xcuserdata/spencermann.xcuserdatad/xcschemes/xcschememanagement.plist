@@ -9,6 +9,29 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>AMRAPTimerWidgetExtension.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>FC2F43642F514DB700BC1301</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FC2F43732F514DB900BC1301</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FC2F437D2F514DB900BC1301</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 	</dict>
 </dict>
 </plist>

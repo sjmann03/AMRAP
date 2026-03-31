@@ -1,10 +1,3 @@
-//
-//  AMRAPApp.swift
-//  AMRAP
-//
-//  Created by Spencer Mann on 2/26/26.
-//
-
 import SwiftUI
 import SwiftData
 
@@ -12,7 +5,13 @@ import SwiftData
 struct AMRAPApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            Exercise.self,
+            WorkoutSet.self,
+            Workout.self,
+            WorkoutTemplate.self,
+            GymLocation.self,
+            AppSettings.self,
+            BodyMeasurement.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
